@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="#222">
+    <Grid Background="#222" Visibility="{x:Bind ViewModel.IsItemSelected,Mode=OneWay}">
         <StackPanel Margin="10" Width="600" HorizontalAlignment="Center">
             <StackPanel.Resources>
                 <Style x:Name="style_tb" TargetType="TextBox">
@@ -32,25 +32,23 @@
                 <TextBox x:Name="tb_ServerName"
                          Header="Server Name"
                          PlaceholderText="Name your Server"
-                         Text="{x:Bind ViewModel.ServerInformationSelectedItem.ServerName, Mode=TwoWay}"/>
+                         Text="{x:Bind ViewModel.ServerInformationSelectedItem.ServerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBox x:Name="tb_ServerIP"
                          Header="Server IP/Domain"
                          Style="{StaticResource style_tb}"
                          PlaceholderText="hatsunenemas.de or 39.01.39.01"
-                         Text="{x:Bind ViewModel.ServerInformationSelectedItem.IPAdresse, Mode=TwoWay}"/>
+                         Text="{x:Bind ViewModel.ServerInformationSelectedItem.IPAdresse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <NumberBox x:Name="nb_ServerPort"
                            Header="Server Port"
                            Style="{StaticResource style_nb}"
                            PlaceholderText="3901"
-                           Text="{x:Bind ViewModel.ServerInformationSelectedItem.Port, Mode=TwoWay}"/>
+                           Text="{x:Bind ViewModel.ServerInformationSelectedItem.Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <CheckBox x:Name="cb_UseAuthentication" 
                           Style="{StaticResource style_cb}"
-                          Checked="cb_UseAuthentication_Checked"
-                          Unchecked="cb_UseAuthentication_Unchecked"
-                          IsChecked="{x:Bind ViewModel.ServerInformationSelectedItem.UsePassword, Mode=TwoWay}">
+                          IsChecked="{x:Bind ViewModel.ServerInformationSelectedItem.UsePassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     Use Authentication
                 </CheckBox>
-                <Grid x:Name="grid_Password">
+                <Grid Visibility="{x:Bind ViewModel.ServerInformationSelectedItem.UsePassword, Mode=OneWay}">
                     <PasswordBox x:Name="pb_Password"
                                  Header="Password"
                                  PlaceholderText="Pa$$w0rd"

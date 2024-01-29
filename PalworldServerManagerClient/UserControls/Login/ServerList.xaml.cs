@@ -1,4 +1,3 @@
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using PalworldServerManagerClient.DI;
 using PalworldServerManagerClient.ViewModels;

@@ -13,15 +13,5 @@ namespace PalworldServerManagerClient.UserControls.Login
             InitializeComponent();
             ViewModel = InstanceManager.Instance.GetInstance<LoginViewViewModel>();
         }
-
-        private void cb_UseAuthentication_Checked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-        {
-            grid_Password.Visibility = Visibility.Visible;
-        }
-
-        private void cb_UseAuthentication_Unchecked(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-        {
-            grid_Password.Visibility = Visibility.Collapsed;
-        }
     }
 }
