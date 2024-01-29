@@ -34,8 +34,6 @@ namespace PalworldServerManagerServer
             //};
             //_steamcmd.StartExecuteBinary(argList);
 
-            await _steamcmd.GetLocalBuildID();
-
             //var clientListener = diService.StartClientListener(3939);
             //clientListener.Start();
 

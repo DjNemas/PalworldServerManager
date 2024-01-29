@@ -18,19 +18,14 @@ namespace PalworldServerManagerServer.DI
         public ServiceProvider CreateServices()
         {
             return new ServiceCollection()
-                .AddTransient<Logger>()
-                .AddTransient<ClientListener>()
+                .AddSingleton<Logger>()
+                .AddSingleton<ClientListener>()
                 .AddTransient<SteamCmd>()
                 .BuildServiceProvider();
         }
 
-        public ClientListener StartClientListener(int port)
-        {
-            return new ClientListener(_serviceProvider.GetRequiredService<Logger>(), port);
-        }
+        public ClientListener StartClientListener(int port) => new ClientListener(GetInstance<Logger>(), port);
 
-        public T GetInstance<T>() where T : class
-            => _serviceProvider.GetRequiredService<T>();
-            
+        public T GetInstance<T>() where T : class => _serviceProvider.GetRequiredService<T>();
     }
 }

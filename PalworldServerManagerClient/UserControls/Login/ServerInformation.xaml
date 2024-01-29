@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="PalworldServerManagerClient.UserControls.Login.ServerInformation"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PalworldServerManagerClient.UserControls.Login"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="#222">
+        <StackPanel Margin="10" Width="600" HorizontalAlignment="Center">
+            <StackPanel.Resources>
+                <Style x:Name="style_tb" TargetType="TextBox">
+                    <Setter Property="Margin" Value="0 10 0 0"/>
+                </Style>
+                <Style x:Name="style_nb" TargetType="NumberBox">
+                    <Setter Property="Margin" Value="0 10 0 0"/>
+                </Style>
+                <Style x:Name="style_cb" TargetType="CheckBox">
+                    <Setter Property="Margin" Value="0 10 0 0"/>
+                </Style>
+                <Style x:Name="style_btn" TargetType="Button">
+                    <Setter Property="Margin" Value="0 10 0 0"/>
+                    <Setter Property="CornerRadius" Value="3"/>
+                </Style>
+                <Style x:Name="style_pb" TargetType="PasswordBox">
+                    <Setter Property="Margin" Value="0 10 0 0"/>
+                </Style>
+            </StackPanel.Resources>
+            <StackPanel>
+                <TextBox x:Name="tb_ServerName"
+                         Header="Server Name"
+                         PlaceholderText="Name your Server"
+                         Text="{x:Bind ViewModel.ServerInformationSelectedItem.ServerName, Mode=TwoWay}"/>
+                <TextBox x:Name="tb_ServerIP"
+                         Header="Server IP/Domain"
+                         Style="{StaticResource style_tb}"
+                         PlaceholderText="hatsunenemas.de or 39.01.39.01"
+                         Text="{x:Bind ViewModel.ServerInformationSelectedItem.IPAdresse, Mode=TwoWay}"/>
+                <NumberBox x:Name="nb_ServerPort"
+                           Header="Server Port"
+                           Style="{StaticResource style_nb}"
+                           PlaceholderText="3901"
+                           Text="{x:Bind ViewModel.ServerInformationSelectedItem.Port, Mode=TwoWay}"/>
+                <CheckBox x:Name="cb_UseAuthentication" 
+                          Style="{StaticResource style_cb}"
+                          Checked="cb_UseAuthentication_Checked"
+                          Unchecked="cb_UseAuthentication_Unchecked"
+                          IsChecked="{x:Bind ViewModel.ServerInformationSelectedItem.UsePassword, Mode=TwoWay}">
+                    Use Authentication
+                </CheckBox>
+                <Grid x:Name="grid_Password">
+                    <PasswordBox x:Name="pb_Password"
+                                 Header="Password"
+                                 PlaceholderText="Pa$$w0rd"
+                                 Style="{StaticResource style_pb}"
+                                 Password="{x:Bind ViewModel.ServerInformationSelectedItem.Password}"/>
+                </Grid>                    
+                <Button Style="{StaticResource style_btn}">
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon Glyph="&#xE703;" />
+                        <TextBlock Text="Connect" Margin="5 0 0 0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

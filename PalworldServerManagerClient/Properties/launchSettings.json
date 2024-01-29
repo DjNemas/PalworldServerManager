@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "PalworldServerManagerClient (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "PalworldServerManagerClient (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

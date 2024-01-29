@@ -1,6 +1,7 @@
 ﻿using MikuLogger;
 using System.Text.Json.Nodes;
 using System.Text.Json;
+using PalworldServerManagerServer.FolderManagment;
 
 namespace PalworldServerManagerServer.Installation
 {
@@ -65,10 +66,7 @@ namespace PalworldServerManagerServer.Installation
             return buildId;
         }
 
-        private DirectoryInfo GetPalworldServerDir()
-            => new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, "PalworldServer"));
-
         private FileInfo GetLocalMetaDataFile()
-            => new FileInfo(Path.Combine(GetPalworldServerDir().FullName, "steamapps", "appmanifest_2394010.acf"));
+            => new FileInfo(Path.Combine(Folders.GetFolderPath(Folder.PalworldServer).FullName, "steamapps", "appmanifest_2394010.acf"));
     }
 }
