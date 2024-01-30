@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <UserControl
-    x:Class="PalworldServerManagerClient.UserControls.Login.ServerInformation"
+    x:Class="PalworldServerManagerClient.UserControls.Login.ServerInfo"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:PalworldServerManagerClient.UserControls.Login"
@@ -32,19 +32,25 @@
                 <TextBox x:Name="tb_ServerName"
                          Header="Server Name"
                          PlaceholderText="Name your Server"
-                         Text="{x:Bind ViewModel.ServerInformationSelectedItem.ServerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                         FocusDisengaged="{x:Bind ViewModel.OnFocusLost}"
+                         LosingFocus="{x:Bind ViewModel.OnFocusLost}"
+                         Text="{x:Bind ViewModel.ServerInformationSelectedItem.ServerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>                         
                 <TextBox x:Name="tb_ServerIP"
                          Header="Server IP/Domain"
                          Style="{StaticResource style_tb}"
                          PlaceholderText="hatsunenemas.de or 39.01.39.01"
+                         LosingFocus="{x:Bind ViewModel.OnFocusLost}"
                          Text="{x:Bind ViewModel.ServerInformationSelectedItem.IPAdresse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <NumberBox x:Name="nb_ServerPort"
+                <TextBox x:Name="nb_ServerPort"
                            Header="Server Port"
-                           Style="{StaticResource style_nb}"
+                           Style="{StaticResource style_tb}"
                            PlaceholderText="3901"
+                           LosingFocus="{x:Bind ViewModel.OnFocusLost}"
+                           BeforeTextChanging="{x:Bind ViewModel.OnPortNumberChanged}"
                            Text="{x:Bind ViewModel.ServerInformationSelectedItem.Port, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <CheckBox x:Name="cb_UseAuthentication" 
                           Style="{StaticResource style_cb}"
+                          LosingFocus="{x:Bind ViewModel.OnFocusLost}"
                           IsChecked="{x:Bind ViewModel.ServerInformationSelectedItem.UsePassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     Use Authentication
                 </CheckBox>
@@ -55,7 +61,8 @@
                                  Style="{StaticResource style_pb}"
                                  Password="{x:Bind ViewModel.ServerInformationSelectedItem.Password}"/>
                 </Grid>                    
-                <Button Style="{StaticResource style_btn}">
+                <Button Style="{StaticResource style_btn}"
+                        Click="{x:Bind ViewModel.Connect}">
                     <StackPanel Orientation="Horizontal">
                         <FontIcon Glyph="&#xE703;" />
                         <TextBlock Text="Connect" Margin="5 0 0 0"/>
