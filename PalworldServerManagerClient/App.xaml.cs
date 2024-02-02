@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.UI.Xaml;
 using PalworldServerManagerClient.Database;
 using PalworldServerManagerClient.DI;
 using PalworldServerManagerClient.FolderManagment;
@@ -24,7 +25,7 @@ namespace PalworldServerManagerClient
 #endif
             _instanceManager = new InstanceManager();
             _instanceManager.CreateServices();
-            _instanceManager.GetInstance<DatabaseContext>().Database.EnsureCreated();
+            _instanceManager.GetInstance<DatabaseContext>().Database.Migrate();
             InitializeComponent();
         }
         protected override void OnLaunched(LaunchActivatedEventArgs args)

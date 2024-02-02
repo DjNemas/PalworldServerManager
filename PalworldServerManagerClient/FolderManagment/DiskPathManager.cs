@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using static System.Environment;
 
 namespace PalworldServerManagerClient.FolderManagment
 {
     public static class DiskPathManager
     {
-        private static readonly string _palworldFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PalworldServerManager");
+        private static readonly string currentDirectory = Environment.GetFolderPath(SpecialFolder.LocalApplicationData);
 
         private static readonly Dictionary<DiskPath, DirectoryInfo> _dirPathList = new()
         {
-            { DiskPath.DatabaseFolder, new DirectoryInfo(Path.Combine(_palworldFolder, "Database")) },
+            { DiskPath.DatabaseFolder, new DirectoryInfo(Path.Combine(currentDirectory, "Database")) },
         };
 
         private static readonly Dictionary<DiskPath, FileInfo> _folderPathList = new()

@@ -14,9 +14,6 @@
                 <Style x:Name="style_tb" TargetType="TextBox">
                     <Setter Property="Margin" Value="0 10 0 0"/>
                 </Style>
-                <Style x:Name="style_nb" TargetType="NumberBox">
-                    <Setter Property="Margin" Value="0 10 0 0"/>
-                </Style>
                 <Style x:Name="style_cb" TargetType="CheckBox">
                     <Setter Property="Margin" Value="0 10 0 0"/>
                 </Style>
@@ -40,7 +37,12 @@
                          Style="{StaticResource style_tb}"
                          PlaceholderText="hatsunenemas.de or 39.01.39.01"
                          LosingFocus="{x:Bind ViewModel.OnFocusLost}"
-                         Text="{x:Bind ViewModel.ServerInformationSelectedItem.IPAdresse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{x:Bind ViewModel.ServerInformationSelectedItem.IPAddresse, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <InfoBar IsOpen="{x:Bind ViewModel.ServerInformationSelectedItem.IpAddresseHasError, Mode=OneWay}"
+                         Severity="Error"
+                         Title="Error"
+                         IsClosable="False"
+                         Message="{x:Bind ViewModel.ServerInformationSelectedItem.IpAddresseErrorMessage, Mode=OneWay}" />
                 <TextBox x:Name="nb_ServerPort"
                            Header="Server Port"
                            Style="{StaticResource style_tb}"
@@ -51,9 +53,8 @@
                 <CheckBox x:Name="cb_UseAuthentication" 
                           Style="{StaticResource style_cb}"
                           LosingFocus="{x:Bind ViewModel.OnFocusLost}"
-                          IsChecked="{x:Bind ViewModel.ServerInformationSelectedItem.UsePassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    Use Authentication
-                </CheckBox>
+                          Content="With Authentication"
+                          IsChecked="{x:Bind ViewModel.ServerInformationSelectedItem.UsePassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Grid Visibility="{x:Bind ViewModel.ServerInformationSelectedItem.UsePassword, Mode=OneWay}">
                     <PasswordBox x:Name="pb_Password"
                                  Header="Password"
@@ -62,7 +63,8 @@
                                  Password="{x:Bind ViewModel.ServerInformationSelectedItem.Password}"/>
                 </Grid>                    
                 <Button Style="{StaticResource style_btn}"
-                        Click="{x:Bind ViewModel.Connect}">
+                        Click="{x:Bind ViewModel.Connect}"
+                        IsEnabled="{x:Bind ViewModel.ServerInformationSelectedItem.HasError, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal">
                         <FontIcon Glyph="&#xE703;" />
                         <TextBlock Text="Connect" Margin="5 0 0 0"/>

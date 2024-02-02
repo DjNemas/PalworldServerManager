@@ -7,23 +7,22 @@ using System.Text;
 
 namespace PalworldServerManagerClient.Communication
 {
-    internal class Client
+    public class Client
     {
         private Logger _logger;
 
-        private readonly IPEndPoint _serverAddress;
+        private IPEndPoint _serverAddress;
         private readonly TcpClient _tcpClient;
 
-        public Client(Logger logger, IPEndPoint serverAddress) 
+        public Client(Logger logger) 
         {
             _logger = logger;
-            _serverAddress = serverAddress;
-
             _tcpClient = new TcpClient();
         }
 
-        public void ConnectToServer()
+        public void ConnectToServer(IPEndPoint serverAddress)
         {
+            _serverAddress = serverAddress;
             _logger.LogInfo("Connecting to Server...");
             try
             {
@@ -40,6 +39,9 @@ namespace PalworldServerManagerClient.Communication
 
         private async void ReadData()
         {
+            if (!_tcpClient.Connected)
+                return;
+
             await using var networkStream = _tcpClient.GetStream();
             var stringBuilder = new StringBuilder();
 
@@ -73,6 +75,9 @@ namespace PalworldServerManagerClient.Communication
 
         public async void SendData(string message)
         {
+            if (!_tcpClient.Connected)
+                return;
+
             if (message.Count() == 1024)
                 message += " ";
             var byteData = Encoding.UTF8.GetBytes(message);

@@ -2,12 +2,16 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using MikuLogger;
+using PalworldServerManagerClient.Communication;
 using PalworldServerManagerClient.Database;
 using PalworldServerManagerClient.Models.DataViewModel;
 using PalworldServerManagerClient.Models.DBModel;
 using PalWorldServerManagerShared.Helper;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Net;
 
 namespace PalworldServerManagerClient.ViewModels
 {
@@ -15,13 +19,14 @@ namespace PalworldServerManagerClient.ViewModels
     {
         private readonly Logger _logger;
         private readonly DatabaseContext _db;
+        private readonly Client _client;
 
-        public LoginViewViewModel(Logger logger, DatabaseContext db)
+        public LoginViewViewModel(Logger logger, DatabaseContext db, Client client)
         {
             _logger = logger;
             _db = db;
             _db.ServerInfos.ForEachAsync(e => ServerInformationList.Add(new ServerInfoViewModel(e))).Wait();
-            
+            _client = client;
         }
 
         private ServerInfoViewModel _serverInformationSelectedItem { get; set; }
@@ -63,6 +68,19 @@ namespace PalworldServerManagerClient.ViewModels
         public void Connect(object sender, RoutedEventArgs e)
         {
             
+            if (IPEndPoint.TryParse(ServerInformationSelectedItem.IPAddresse, out var ip))
+            {
+                _client.ConnectToServer(ip);
+            }
+
+            var domain = Dns.GetHostAddresses(ServerInformationSelectedItem.IPAddresse);
+            if (domain.Count() == 1)
+            {
+                var newIP = new IPEndPoint(domain.ElementAt(0), ServerInformationSelectedItem.Port);
+                _client.ConnectToServer(newIP);
+            }
+
+            
         }
 
         public void OnFocusLost(object sender, RoutedEventArgs e)
@@ -90,5 +108,6 @@ namespace PalworldServerManagerClient.ViewModels
             if (value > int.MaxValue || value < int.MinValue)
                 e.Cancel = true;
         }
+        
     }
 }

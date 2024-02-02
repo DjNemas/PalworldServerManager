@@ -34,8 +34,8 @@ namespace PalworldServerManagerServer
             //};
             //_steamcmd.StartExecuteBinary(argList);
 
-            //var clientListener = diService.StartClientListener(3939);
-            //clientListener.Start();
+            var clientListener = diService.StartClientListener(3939);
+            clientListener.Start();
 
             var logger = diService.GetInstance<Logger>();
             logger.LogInfo("Server Application");
