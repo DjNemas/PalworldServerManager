@@ -1,5 +1,4 @@
 using Microsoft.UI.Xaml;
-using PalworldServerManagerClient.ViewModels;
 
 namespace PalworldServerManagerClient.Views
 {

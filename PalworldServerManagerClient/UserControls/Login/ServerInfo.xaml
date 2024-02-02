@@ -43,7 +43,7 @@
                          Title="Error"
                          IsClosable="False"
                          Message="{x:Bind ViewModel.ServerInformationSelectedItem.IpAddresseErrorMessage, Mode=OneWay}" />
-                <TextBox x:Name="nb_ServerPort"
+                <TextBox x:Name="tb_ServerPort"
                            Header="Server Port"
                            Style="{StaticResource style_tb}"
                            PlaceholderText="3901"
@@ -63,11 +63,18 @@
                                  Password="{x:Bind ViewModel.ServerInformationSelectedItem.Password}"/>
                 </Grid>                    
                 <Button Style="{StaticResource style_btn}"
-                        Click="{x:Bind ViewModel.Connect}"
+                        Click="ConnectAsync"
                         IsEnabled="{x:Bind ViewModel.ServerInformationSelectedItem.HasError, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal">
                         <FontIcon Glyph="&#xE703;" />
                         <TextBlock Text="Connect" Margin="5 0 0 0"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource style_btn}"
+                        Click="DisconnectAsync">
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon Glyph="&#xE703;" />
+                        <TextBlock Text="Disconnect" Margin="5 0 0 0"/>
                     </StackPanel>
                 </Button>
             </StackPanel>

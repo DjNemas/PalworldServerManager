@@ -8,8 +8,8 @@ namespace PalworldServerManagerClient.Models.DataViewModel
 {
     public class ServerInfoViewModel : ViewModelBase
     {
-        private ServerInfo _dbModel;
-        public ServerInfoViewModel(ServerInfo dbModel) 
+        private ServerInfoDB _dbModel;
+        public ServerInfoViewModel(ServerInfoDB dbModel) 
         {
             _dbModel = dbModel;
         }
@@ -50,7 +50,7 @@ namespace PalworldServerManagerClient.Models.DataViewModel
         public bool UsePassword { get; set; }
         public string Password { get; set; }
 
-        public ServerInfo GetDbModel() => _dbModel;
+        public ServerInfoDB GetDbModel() => _dbModel;
 
         private bool IsDomainOrIPAddress(string userInput)
         {

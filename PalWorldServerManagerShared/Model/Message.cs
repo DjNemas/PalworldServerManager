@@ -2,10 +2,10 @@
 
 namespace PalWorldServerManagerShared.Model
 {
-    public class ToServerMessage<T>
+    public class Message
     {
-        public ToServerCommand Command { get; set; }
-        public T? Data { get; set; }
+        public Command Command { get; set; }
+        public string? JsonData { get; set; }
         public string? ErrorMessage { get; set; }
     }
 }

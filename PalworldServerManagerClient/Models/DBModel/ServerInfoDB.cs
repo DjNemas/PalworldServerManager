@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PalworldServerManagerClient.Models.DBModel
 {
-    public class ServerInfo
+    public class ServerInfoDB
     {
         [Key]
         public int Id { get; set; }

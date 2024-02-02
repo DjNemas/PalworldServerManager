@@ -1,7 +1,8 @@
 ﻿namespace PalWorldServerManagerShared.Definitions
 {
-    public enum ToServerCommand
+    public enum Command
     {
+        Error = 0,
         Connect
     }
 }

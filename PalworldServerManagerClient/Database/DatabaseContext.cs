@@ -9,7 +9,7 @@ namespace PalworldServerManagerClient.Database
 {
     public class DatabaseContext : DbContext
     {   
-       public DbSet<ServerInfo> ServerInfos { get; set; }
+       public DbSet<ServerInfoDB> ServerInfos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

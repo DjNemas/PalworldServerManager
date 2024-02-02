@@ -34,10 +34,9 @@ namespace PalworldServerManagerClient.DI
                 .AddSingleton<Logger>()
                 .AddSingleton<App>()
                 .AddSingleton<LoginViewViewModel>()
-                .AddTransient<ServerList>()
-                .AddTransient<LoginView>()
-                .AddTransient<LoginView>()
-                .AddTransient<Client>()
+                .AddSingleton<ServerList>()
+                .AddSingleton<ServerInfo>()
+                .AddSingleton<LoginView>()
                 .AddDbContext<DatabaseContext>()
                 .BuildServiceProvider();
         }

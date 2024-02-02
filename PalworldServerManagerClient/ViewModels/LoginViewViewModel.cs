@@ -4,14 +4,20 @@ using Microsoft.UI.Xaml.Controls;
 using MikuLogger;
 using PalworldServerManagerClient.Communication;
 using PalworldServerManagerClient.Database;
+using PalworldServerManagerClient.DI;
 using PalworldServerManagerClient.Models.DataViewModel;
 using PalworldServerManagerClient.Models.DBModel;
+using PalworldServerManagerClient.Pages;
+using PalworldServerManagerClient.UserControls.Login;
+using PalworldServerManagerClient.Views;
+using PalWorldServerManagerShared.Definitions;
 using PalWorldServerManagerShared.Helper;
+using PalWorldServerManagerShared.Model;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Net;
+using Windows.UI.Popups;
 
 namespace PalworldServerManagerClient.ViewModels
 {
@@ -19,14 +25,12 @@ namespace PalworldServerManagerClient.ViewModels
     {
         private readonly Logger _logger;
         private readonly DatabaseContext _db;
-        private readonly Client _client;
 
-        public LoginViewViewModel(Logger logger, DatabaseContext db, Client client)
+        public LoginViewViewModel(Logger logger, DatabaseContext db)
         {
             _logger = logger;
             _db = db;
             _db.ServerInfos.ForEachAsync(e => ServerInformationList.Add(new ServerInfoViewModel(e))).Wait();
-            _client = client;
         }
 
         private ServerInfoViewModel _serverInformationSelectedItem { get; set; }
@@ -47,7 +51,7 @@ namespace PalworldServerManagerClient.ViewModels
 
         public async void Add(object sender, RoutedEventArgs e)
         {
-            var viewModel = new ServerInfoViewModel(new ServerInfo())
+            var viewModel = new ServerInfoViewModel(new ServerInfoDB())
             {
                 ServerName = "New Server"
             };
@@ -63,24 +67,6 @@ namespace PalworldServerManagerClient.ViewModels
             _db.Remove(ServerInformationSelectedItem.GetDbModel());
             await _db.SaveChangesAsync();
             ServerInformationList.Remove(ServerInformationSelectedItem);
-        }
-
-        public void Connect(object sender, RoutedEventArgs e)
-        {
-            
-            if (IPEndPoint.TryParse(ServerInformationSelectedItem.IPAddresse, out var ip))
-            {
-                _client.ConnectToServer(ip);
-            }
-
-            var domain = Dns.GetHostAddresses(ServerInformationSelectedItem.IPAddresse);
-            if (domain.Count() == 1)
-            {
-                var newIP = new IPEndPoint(domain.ElementAt(0), ServerInformationSelectedItem.Port);
-                _client.ConnectToServer(newIP);
-            }
-
-            
         }
 
         public void OnFocusLost(object sender, RoutedEventArgs e)
@@ -108,6 +94,6 @@ namespace PalworldServerManagerClient.ViewModels
             if (value > int.MaxValue || value < int.MinValue)
                 e.Cancel = true;
         }
-        
+
     }
 }

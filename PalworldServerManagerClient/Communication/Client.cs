@@ -1,18 +1,28 @@
 ﻿using MikuLogger;
+using PalWorldServerManagerShared.Extensions;
+using PalWorldServerManagerShared.Helper;
+using PalWorldServerManagerShared.Model;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace PalworldServerManagerClient.Communication
 {
     public class Client
     {
-        private Logger _logger;
+        public static readonly List<Client> ConnectedTcpClients = new List<Client>();
+        public bool IsConnected { get; set; }
+
+        private readonly Logger _logger;
+        private readonly IncomingDataHandler _incomingDataHandler;
+        private readonly TcpClient _tcpClient;
 
         private IPEndPoint _serverAddress;
-        private readonly TcpClient _tcpClient;
 
         public Client(Logger logger) 
         {
@@ -20,33 +30,37 @@ namespace PalworldServerManagerClient.Communication
             _tcpClient = new TcpClient();
         }
 
-        public void ConnectToServer(IPEndPoint serverAddress)
+        public async Task ConnectToServerAsync(IPEndPoint serverAddress, bool withPermaRead = false)
         {
             _serverAddress = serverAddress;
             _logger.LogInfo("Connecting to Server...");
             try
             {
-                _tcpClient.Connect(_serverAddress);
+                await _tcpClient.ConnectAsync(_serverAddress);
+                IsConnected = true;
             }
             catch (Exception ex)
             {
                 _logger.LogError("Connection to Server Failed." + ex);
+                IsConnected = false;
                 return;
             }
             _logger.LogInfo("Connected to Server.");
-            ReadData();
+
+            if(withPermaRead)
+                _ = ReadData();
         }
 
-        private async void ReadData()
+        private async Task ReadData()
         {
-            if (!_tcpClient.Connected)
-                return;
-
             await using var networkStream = _tcpClient.GetStream();
             var stringBuilder = new StringBuilder();
 
             while (true)
             {
+                if (!_tcpClient.Connected)
+                    return;
+
                 var buffer = new byte[1_024];
                 int bytesToRead = 0;
                 try
@@ -65,24 +79,35 @@ namespace PalworldServerManagerClient.Communication
 
                 if(bytesToRead < buffer.Length)
                 {
-                    var message = stringBuilder.ToString();
-                    _logger.LogInfo("Message Recieved: " + message);
-                    _logger.LogInfo("Message Lenght: " + message.Count());
+                    
+                    var jsonString = stringBuilder.ToString();
+#if DEBUG
+                    _logger.LogInfo("Message Recieved: " + jsonString);
+#endif
                     stringBuilder.Clear();
+
+                    if (!string.IsNullOrEmpty(jsonString))
+                    {
+                        var message = JsonSerializer.Deserialize<Message>(jsonString);
+                        _incomingDataHandler.ProcessIncomingData(message);
+                    }
                 }
             }
         }
 
-        public async void SendData(string message)
+        public async Task SendDataAsync(Message message)
         {
             if (!_tcpClient.Connected)
                 return;
 
-            if (message.Count() == 1024)
-                message += " ";
-            var byteData = Encoding.UTF8.GetBytes(message);
+            var jsonString = message.ToJsonString();
+
+            if (jsonString.Count() == 1024)
+                jsonString += " ";
+
             try
             {
+                var byteData = Encoding.UTF8.GetBytes(jsonString);
                 await _tcpClient.GetStream().WriteAsync(byteData);
             }
             catch (Exception ex)
@@ -90,6 +115,11 @@ namespace PalworldServerManagerClient.Communication
                 _logger.LogError("Lost Connection to Server on Sending Data" + ex);
                 _tcpClient.Close();
             }
+        }
+
+        public void CloseConnection()
+        {
+            _tcpClient.Close();
         }
     }
 }

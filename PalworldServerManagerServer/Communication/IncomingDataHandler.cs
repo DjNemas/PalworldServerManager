@@ -1,14 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PalworldServerManagerServer.Definistions;
+using PalWorldServerManagerShared.Definitions;
+using PalWorldServerManagerShared.Model;
+using System.Net.Sockets;
+using System.Text.Json;
 
 namespace PalworldServerManagerServer.Communication
 {
-    public class IncomingDataHandler
+    public static class IncomingDataHandler
     {
-        public 
+        public static void HandleWelcomeClients(TcpClient client, Message message)
+        {
+            if (message.Command == Command.Connect)
+            {
+                if(message.JsonData is not null)
+                {
+                    var connection = JsonSerializer.Deserialize<Connection>(message.JsonData);
+                    if (connection is not null)
+                    {
+                        if(connection.ClientType == 1)
+                            ClientListener.SetReadonlyClient(client);
+                    }
+                }
+            }
+        }
 
+        public static async void ProcessIncomingData(Message message)
+        {
+            
+
+        }
     }
 }
